@@ -21,8 +21,7 @@ When a user makes their first request, the server logs the exact time and starts
 * **Why this approach?**  as mentioned under Requirements section under 2nd point, 2nd subpoint (Each key has a request count and a window start timestamp. Reset the count when the window has elapsed.)
 
 ### 3. Handling Concurrent Users (The Async Lock)
-Because FastAPI processes requests asynchronously, there was a risk of a "race condition." If 50 requests hit the server at the exact same millisecond, they might all read the counter at the same time, see a count of `1`, and all update it to `2`—completely bypassing the rate limit. 
-To prevent this, I wrapped the counting logic inside an `asyncio.Lock()`. This forces simultaneous requests to form a quick line and update the counter one at a time.
+Because FastAPI processes requests asynchronously, there was a risk of a "race condition." If 50 requests hit the server at the exact same millisecond, they might all read the counter at the same time, see a count of `1`, and all update it to `2`—completely bypassing the rate limit. To prevent this, I wrapped the counting logic inside an `asyncio.Lock()`. This forces simultaneous requests to form a quick line and update the counter one at a time.
 ---
 
 ## Limitations and Trade-offs
