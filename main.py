@@ -107,3 +107,6 @@ async def data_list():
 @app.get("/data/export", openapi_extra={"endpoint_type": "read"})
 async def data_export():
     return {"ok": True}
+@app.get("/")
+async def root():
+    return {"message": "Rate Limiter API is running! Access the endpoint via POST at /ai/generate"}
