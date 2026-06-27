@@ -1,4 +1,4 @@
-# Context-Aware Rate Limiter
+# Context-Aware Rate Limiter API
 
 ## Server Link: https://rate-limiter-ooln.onrender.com
 ## How to Run It
