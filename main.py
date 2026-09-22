@@ -4,6 +4,7 @@ from typing import Dict, Tuple
 from fastapi import FastAPI, Request, Response, status
 from fastapi.responses import JSONResponse
 from starlette.routing import Match
+from collections import defaultdict
 
 
 RATE_LIMIT_RULES = {
@@ -15,8 +16,8 @@ RATE_LIMIT_RULES = {
 
 app = FastAPI()
 
-usage_store: Dict[Tuple[str, str, str], Dict[str, any]] = {}
-store_lock = asyncio.Lock()
+usage_store = {}
+user_locks = defaultdict(asyncio.Lock)
 
 
 @app.middleware("http")
@@ -56,7 +57,7 @@ async def rate_limiter_middleware(request: Request, call_next):
     tracking_key = (client_ip, tier, endpoint_type)
     
     # Rate Limiting Logic 
-    async with store_lock: 
+    async with user_locks[tracking_key]: 
         if tracking_key not in usage_store:
             # First request
             usage_store[tracking_key] = {"count": 1, "window_start": now}
